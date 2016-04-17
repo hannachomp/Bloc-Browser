@@ -76,7 +76,17 @@
     
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
-   
+    
+    
+    UIAlertController* welcomeAlert = [UIAlertController alertControllerWithTitle:@"Welcome"
+                                                                   message:@"Welcome to Bloc Browser!"
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                          handler:^(UIAlertAction * action) {}];
+    
+    [welcomeAlert addAction:defaultAction];
+    [self presentViewController:welcomeAlert animated:YES completion:nil];
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -199,5 +209,6 @@
     [self updateButtonsAndTitle];
     
 }
+
 
 @end
