@@ -16,6 +16,7 @@
 @property (nonatomic, weak) UILabel *currentLabel;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
+@property (nonatomic, strong) UIPinchGestureRecognizer *pinchGesture;
 
 @end
 
@@ -66,6 +67,9 @@
         [self addGestureRecognizer:self.tapGesture];
         self.panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panFired:)];
         [self addGestureRecognizer:self.panGesture];
+        
+        self.pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchFired:)];
+        [self addGestureRecognizer:self.pinchGesture];
         
     }
     return self;
@@ -144,6 +148,20 @@
     }
 }
 
+-(void) pinchFired:(UIPinchGestureRecognizer *)recognizer{
+    if (recognizer.state == UIGestureRecognizerStateChanged) {
+        
+        CGFloat scale = [recognizer scale];
+        
+        NSLog(@"New scale: %f", recognizer.scale);
+        
+        if ([self.delegate respondsToSelector:@selector(floatingToolbar:didTryToPinchWithScale:)]) {
+            [self.delegate floatingToolbar:self didTryToPinchWithScale:scale];
+        }
+        
+        [recognizer setScale:1];
+    }
+}
 #pragma mark - Button Enabling
 
 - (void) setEnabled:(BOOL)enabled forButtonWithTitle:(NSString *)title {
