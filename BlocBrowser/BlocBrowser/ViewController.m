@@ -75,6 +75,19 @@
     // Do any additional setup after loading the view, typically from a nib.
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    static const CGFloat itemHeight = 50;
+    CGFloat width = CGRectGetWidth(self.view.bounds);
+
+    CGFloat browserHeight = CGRectGetHeight(self.view.bounds) - itemHeight;
+
+    self.awesomeToolbar.frame = CGRectMake(0, browserHeight, width, itemHeight);
+    
+
+    
+}
+
     
 - (void) viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
@@ -86,8 +99,6 @@
     //Now, assign the frames
     self.textField.frame = CGRectMake(0, 0, width, itemHeight);
     self.webView.frame = CGRectMake(0, CGRectGetMaxY(self.textField.frame), width, browserHeight);
-    
-    self.awesomeToolbar.frame = CGRectMake(0, browserHeight, width, itemHeight);
     
 }
 
@@ -157,6 +168,15 @@
     CGPoint newPoint = CGPointMake(startingPoint.x + offset.x, startingPoint.y + offset.y);
     
     CGRect potentialNewFrame = CGRectMake(newPoint.x, newPoint.y, CGRectGetWidth(toolbar.frame), CGRectGetHeight(toolbar.frame));
+    
+    if (CGRectContainsRect (self.view.bounds, potentialNewFrame)) {
+        toolbar.frame = potentialNewFrame;
+    }
+}
+
+- (void) floatingToolbar:(AwesomeFloatingToolbar *)toolbar didTryToPinchWithScale:(CGFloat)scale {
+    CGPoint startingPoint = toolbar.frame.origin;
+    CGRect potentialNewFrame = CGRectMake(startingPoint.x, startingPoint.y, CGRectGetWidth(toolbar.frame)*scale, CGRectGetHeight(toolbar.frame)*scale);
     
     if (CGRectContainsRect (self.view.bounds, potentialNewFrame)) {
         toolbar.frame = potentialNewFrame;

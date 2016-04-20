@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, strong) UIPinchGestureRecognizer *pinchGesture;
+@property (nonatomic, strong) UILongPressGestureRecognizer *pressGesture;
 
 @end
 
@@ -70,6 +71,11 @@
         
         self.pinchGesture = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchFired:)];
         [self addGestureRecognizer:self.pinchGesture];
+        
+        self.pressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(pressFired:)];
+        self.pressGesture.minimumPressDuration = 1.0f;
+        self.pressGesture.allowableMovement = 100.0f;
+        [self addGestureRecognizer:self.pressGesture];
         
     }
     return self;
@@ -161,6 +167,25 @@
         
         [recognizer setScale:1];
     }
+}
+
+- (void) pressFired:(UILongPressGestureRecognizer *)recognizer {
+    
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        
+        UIColor *pressedView = ((UILabel*)self.labels[0]).backgroundColor;
+        
+        for (NSInteger i = 0; i < self.colors.count; i++) {
+            UILabel *currentLabel = self.labels[i];
+            currentLabel.backgroundColor = ((UILabel*)self.labels[(i+1) % self.colors.count]).backgroundColor;
+        
+        if (i == (self.colors.count - 1)) {
+            ((UILabel*)self.labels[i]).backgroundColor = pressedView;
+        
+        NSLog(@"Long Press");
+        }
+        }
+}
 }
 #pragma mark - Button Enabling
 
